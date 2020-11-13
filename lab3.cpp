@@ -7,7 +7,7 @@
 using namespace std;
 
 class Point {
-protected:
+public:
     int x, y;
 public:
     Point() {
@@ -99,7 +99,11 @@ public:
         return *array[i];
     }
     void deleteObject(int i) {
-        delete array[i];
+        Point* p1 = array[i];
+        if (p1->x == -572662307) {
+            cout << i <<" is empty " << endl;
+        }
+        else delete array[i];
         cout << "deleted " << i << endl;
     }
     ~MyStorage()
@@ -111,7 +115,7 @@ public:
 int main()
 {
     unsigned int start_time = clock();
-
+    int kol = 10;
     // создаем хранилище
     MyStorage storage(10);
     // добавляем в него объекты
@@ -123,7 +127,7 @@ int main()
             int x = random() % (100 + 1 - 1) + 1;
             int y = random() % (100 + 1 - 1) + 1;
             storage.setObject(i, new Point(x, y));
-            cout << "Point (" << x << ", " << y << ")" << endl;
+            cout << "Point "<< i  << " (" << x << ", " << y << ")" << endl;
 
         }
         if (m == 2) {
@@ -131,7 +135,7 @@ int main()
             int y = random() % (100 + 1 - 1) + 1;
             int c = random() % (100 + 1 - 1) + 1;
             storage.setObject(i, new ColoredPoint(x, y, c));
-            cout << "ColoredPoint (" << x << ", " << y << ", " << c << ")" << endl;
+            cout << "ColoredPoint "<< i  <<"(" << x << ", " << y << ", " << c << ")" << endl;
         }
     }
     // обращаемся поочередно ко всем
@@ -162,7 +166,7 @@ int main()
                 int y = random() % (100 + 1 - 1) + 1;
                 int l = random() % (9 + 0 - 0) + 0;
                 storage.setObject(l, new Point(x, y));
-                cout << "Point (" << x << ", " << y << ")" << endl;
+                cout << "Point " << i << " (" << x << ", " << y << ")" << endl;
             }
             if (n == 2) {
                 int x = random() % (100 + 1 - 1) + 1;
@@ -170,7 +174,7 @@ int main()
                 int c = random() % (100 + 1 - 1) + 1;
                 int l = random() % (9 + 0 - 0) + 0;
                 storage.setObject(l, new ColoredPoint(x, y, c));
-                cout << "ColoredPoint (" << x << ", " << y << ", " << c << ")" << endl;
+                cout << "ColoredPoint " << i << "(" << x << ", " << y << ", " << c << ")" << endl;
             }
         }
             if (m == 2) {
@@ -222,7 +226,8 @@ int main()
         unsigned int end_time = clock();
         unsigned int search_time = end_time - start_time;
 
-        cout << ((float)search_time) / CLOCKS_PER_SEC<< "секунд"<<endl;
+        cout << endl;
+        cout << ((float)search_time) / CLOCKS_PER_SEC<< " seconds"<<endl;
         _getch();
 
     }
