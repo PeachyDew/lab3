@@ -5,108 +5,101 @@
 #include <random>
 #include <ctime>
 using namespace std;
+int storageSize;
 
-class Point {
-public:
+class Point {//определение класса Point
+public: //доступны в данном классе и классах-потомках
     int x, y;
 public:
-    Point() {
-        cout << "Point()\n";
+    Point() { //конструктор по умолчанию
         x = 0;
         y = 0;
     }
-    Point(int x, int y) {
-       // cout << "Point(int x, int y)\n";
+    Point(int x, int y) { //конструктор с параметрами
         this->x = x;
         this->y = y;
     }
-    Point(const Point& p) {
-        //cout << "Point(const Point &p)\n";
+    Point(const Point& p)  //конструктор копирования
+    {
         x = p.x;
         y = p.y;
     }
-    ~Point() {
-        //cout << "~Point()\n";
-        //cout << x << ", " << y << endl;
+    ~Point() //деструктор Point
+    {
+
     }
-    void method1() {
+    void method1() //реализация метода в определении класса
+    {
         cout << "black\n";
    
     }
-    void method2() {
+    void method2() //реализация метода в определении класса
+    {
         cout << "white\n";
-  
     }
-    // void reset();
 };
 
-class ColoredPoint : public Point {
+class ColoredPoint : public Point {//класс-наследник класса Point
 protected:
     int color;
 public:
-    ColoredPoint() :Point() {
-        cout << "ColoredPoint()\n";
+    ColoredPoint() :Point() //конструктор по умолчанию
+    {
         color = 0;
     }
-    ColoredPoint(int x, int y, int color) :Point(x, y) {
-        //cout << "ColoredPoint(int x, int y, int color)\n";
-        //cout << "ColoredPoint (" << x << ", " << y << ", " << color << ")"<<endl;
+    ColoredPoint(int x, int y, int color) :Point(x, y) //конструктор с параметрами
+    {
         this->color = color;
     }
-    ColoredPoint(const ColoredPoint& p) {
-        cout << "ColoredPoint(const ColoredPoint &p)\n";
+    ColoredPoint(const ColoredPoint& p) {//конструктор копирования
         color = p.color;
         x = p.x;
         y = p.y;
     }
-    ~ColoredPoint() {
-        //cout << x << ", " << y << endl;
-        //cout << "~ColoredPoint()\n";
+    ~ColoredPoint() {//деструктор ColoredPoint
+
     }
-    void change_color(int new_color) {
+    void change_color(int new_color) {//метод смены цвета
         color = new_color;
     }
 
 };
 
- 
-//    int getCount()
-//    {
-//        amount = sizeof(array) / sizeof(array[0]);
-//        return amount;
-
-
 class MyStorage {
 private:
     Point** array;
     int size;
-    int amount=10;
+    int amount=storageSize;
 public:
-    MyStorage(int size)
+    MyStorage(int size)//конструктор с параметром
     {
         this->size = size;
         array = new Point * [size];
     }
-    void setObject(int i, Point* object) {
+    void setObject(int i, Point* object)  //метод  добавления объекта
+    {
         array[i] = object;
     }
-    int getCount()
+    int getCount() //метод возвращения количества
     {
-        //amount = sizeof(objects) / sizeof(objects[0]);
         return amount;
     }
-    Point getObject(int i) {
+    Point getObject(int i)  //метод обращения к объекту
+    {
         return *array[i];
     }
-    void deleteObject(int i) {
+    void deleteObject(int i) //метод удаления объекта
+    {
         Point* p1 = array[i];
-        if (p1->x == -572662307) {
+        if (p1->x == -572662307) 
+        {
             cout << i <<" is empty " << endl;
+            return;
         }
         else delete array[i];
-        cout << "deleted " << i << endl;
+        cout << "deleted element with index " << i << endl;
     }
-    ~MyStorage()
+    ~MyStorage() //деструктор MyStorage
             {
              
             }
@@ -114,23 +107,24 @@ public:
 
 int main()
 {
-    unsigned int start_time = clock();
-    int kol = 10;
-    // создаем хранилище
-    MyStorage storage(10);
-    // добавляем в него объекты
-    for (int i = 0; i < storage.getCount(); i++) {
+    cout << "Enter storage size: ";
+    cin >> storageSize; 
+    MyStorage storage(storageSize);  // создаем хранилище 
+    for (int i = 0; i < storage.getCount(); i++)     // добавляем в него объекты
+    {
         random_device random;// генератор псевдо случайных чисел
         mt19937 mersenne(random());
         int m = random() % (2 + 1 - 1) + 1;
-        if (m == 1) {
+        if (m == 1) // создание и добавление объекта Point
+        {
             int x = random() % (100 + 1 - 1) + 1;
             int y = random() % (100 + 1 - 1) + 1;
             storage.setObject(i, new Point(x, y));
             cout << "Point "<< i  << " (" << x << ", " << y << ")" << endl;
 
         }
-        if (m == 2) {
+        if (m == 2) // создаие и добавление объекта ColoredPoint
+        {
             int x = random() % (100 + 1 - 1) + 1;
             int y = random() % (100 + 1 - 1) + 1;
             int c = random() % (100 + 1 - 1) + 1;
@@ -138,98 +132,69 @@ int main()
             cout << "ColoredPoint "<< i  <<"(" << x << ", " << y << ", " << c << ")" << endl;
         }
     }
-    // обращаемся поочередно ко всем
-    for (int i = 0; i < storage.getCount(); i++) {
-        random_device random;// генератор псевдо случайных чисел
-        mt19937 mersenne(random());
-        int m = random() % (2 + 1 - 1) + 1;
-        if (m == 1) {
-            storage.getObject(i).method1();
-        }
-        if (m == 2) {
-            storage.getObject(i).method2();
-        }
-    }
-    cout  << endl;
-    cout  << endl;
+    cout << endl;
 
-    // рандомные действия
-    for (int i = 0; i < storage.getCount(); i++) {
+    int operations;
+    cout << "Enter amount of operations: ";
+    cin >> operations;
+    cout  << endl;
+    cout  << endl;
+    unsigned int start_time = clock(); // старт таймера
+    for (int i = 0; i < operations; i++) {    // рандомные действия
         random_device random;// генератор псевдо случайных чисел
         mt19937 mersenne(random());
         int m = random() % (3 + 1 - 1) + 1;
 
-        if (m == 1) {
+        if (m == 1) 
+        {
             int n = random() % (2 + 1 - 1) + 1;
-            if (n == 1) {
+            if (n == 1) // создаие и добавление объекта Point
+            {
                 int x = random() % (100 + 1 - 1) + 1;
                 int y = random() % (100 + 1 - 1) + 1;
-                int l = random() % (9 + 0 - 0) + 0;
+                int l = random() % (storageSize + 0 - 0) + 0;
                 storage.setObject(l, new Point(x, y));
-                cout << "Point " << i << " (" << x << ", " << y << ")" << endl;
+                cout << "Created new Point " << i << " (" << x << ", " << y << ")" << endl;
             }
-            if (n == 2) {
+            if (n == 2) // создаие и добавление объекта ColoredPoint
+            {
                 int x = random() % (100 + 1 - 1) + 1;
                 int y = random() % (100 + 1 - 1) + 1;
                 int c = random() % (100 + 1 - 1) + 1;
-                int l = random() % (9 + 0 - 0) + 0;
+                int l = random() % (storageSize + 0 - 0) + 0;
                 storage.setObject(l, new ColoredPoint(x, y, c));
-                cout << "ColoredPoint " << i << "(" << x << ", " << y << ", " << c << ")" << endl;
+                cout << "Created new ColoredPoint " << i << "(" << x << ", " << y << ", " << c << ")" << endl;
             }
         }
-            if (m == 2) {
+            if (m == 2) //удаление объекта
+            {
                 int l = random() % (9 + 0 - 0) + 0;
                 storage.deleteObject(l);
             }
-            if (m == 3) {
+            if (m == 3) //вызов случайного метода
+            {
                 int l = random() % (9 + 0 - 0) + 0;
-                int n = random() % (1 + 0 - 0) + 0;
-                if (n == 0) {
+                int n = random() % (2 + 1 - 1) + 1;
+
+                if (n == 1) 
+                {
+                    cout << "Method1 call on element with index " << l << ": ";                   
                     storage.getObject(l).method1();
 
                 }
-                if (n == 1) {
+                if (n == 2) 
+                {
+                    cout << "Method2 call on element with index " << l << ": ";
                     storage.getObject(l).method2();
                 }
             }
-
         }
 
-        {
-            /*Point p;
-            Point p2(10, 20);
-            Point p3(p2);*/
-        }
-
-        //Point* p4 = new Point;
-       // Point* p5 = new Point(10, 20);
-        //Point* p6 = new Point(*p5);
-
-        //p5->reset();
-        //p5->move(10, 10);
-
-        //delete p4;
-        //delete p5;
-        //delete p6;
-
-       // ColoredPoint* cp = new ColoredPoint(1, 2, 42);
-        //Point* p7 = new ColoredPoint(1, 2, 42);
-        //delete cp;
-        //delete p7;
-
-        //Section* s1 = new Section;
-        //Section* s2 = new Section(*s1);
-
-       // delete s1;
-        //delete s2;
-      
-        unsigned int end_time = clock();
+        unsigned int end_time = clock();//остановка таймера
         unsigned int search_time = end_time - start_time;
-
         cout << endl;
-        cout << ((float)search_time) / CLOCKS_PER_SEC<< " seconds"<<endl;
+        cout << "Runtime: " <<((float)search_time) / CLOCKS_PER_SEC<< " seconds"<<endl;
         _getch();
-
     }
 
 
